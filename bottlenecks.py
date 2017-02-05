@@ -7,7 +7,11 @@ U = 20
 tempMin = .18
 tempMax = .22
 
-data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*'
+try:
+    data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*'
+except:
+    data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
+
 mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin,tempMax=tempMax)
 
 layer_trials = [[200,100,10,5]]
@@ -61,7 +65,7 @@ try:
         L2b = np.loadtxt('U' + str(U) + '/' + 'layer_tensors/' + filename + '/L2b.txt')#, delimiter='')
         L3b = np.loadtxt('U' + str(U) + '/' + 'layer_tensors/' + filename + '/L3b.txt')#, delimiter='')
         L4b = np.loadtxt('U' + str(U) + '/' + 'layer_tensors/' + filename + '/L4b.txt')#, delimiter='')
-        
+
         for i in range(len(all_images)):
             after_l1 = np.matmul(all_images[i],L1W)
             after_l1 = np.add(after_l1, L1b)
@@ -95,6 +99,6 @@ except:
     cant_find.append((L1,L2,L3,L4))
 
 if len(cant_find) != 0:
-    print 'cant find layers: ', cant_find
+    print('cant find layers: ', cant_find)
 
 os.system("python lowerDimensionEmbed.py")

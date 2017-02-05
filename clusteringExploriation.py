@@ -69,39 +69,39 @@ for i_dataset, dataset in enumerate(datasets):
     X, y = dataset
     # normalize dataset for easier parameter selection
     X = StandardScaler().fit_transform(X)
-    print '1'
+    #  '1'
     # estimate bandwidth for mean shift
     bandwidth = cluster.estimate_bandwidth(X, quantile=0.3)
-    print '2'
+    #  '2'
     # connectivity matrix for structured Ward
     connectivity = kneighbors_graph(X, n_neighbors=10, include_self=False)
-    print '3'
+    #  '3'
     # make connectivity symmetric
     connectivity = 0.5 * (connectivity + connectivity.T)
-    print '4'
+    #  '4'
     # create clustering estimators
     ms = cluster.MeanShift(bandwidth=bandwidth, bin_seeding=True)
-    print '5'
+    #  '5'
     two_means = cluster.MiniBatchKMeans(n_clusters=2)
-    print '6'
+    #  '6'
     ward = cluster.AgglomerativeClustering(n_clusters=2, linkage='ward',
                                            connectivity=connectivity)
-    print '7'
+    #  '7'
     spectral = cluster.SpectralClustering(n_clusters=2,
                                           eigen_solver='arpack',
                                           affinity="nearest_neighbors")
-    print '8'
+    #  '8'
     dbscan = cluster.DBSCAN(eps=.2)
-    print '9'
+    #  '9'
     affinity_propagation = cluster.AffinityPropagation(damping=.9,
                                                        preference=-200)
-    print '10'
+    #  '10'
     average_linkage = cluster.AgglomerativeClustering(
         linkage="average", affinity="cityblock", n_clusters=2,
         connectivity=connectivity)
-    print '11'
+    #  '11'
     birch = cluster.Birch(n_clusters=2)
-    print '12'
+    #  '12'
     clustering_algorithms = [
         two_means, affinity_propagation, ms, spectral, ward, average_linkage,
         dbscan, birch]
@@ -109,10 +109,10 @@ for i_dataset, dataset in enumerate(datasets):
     for name, algorithm in zip(clustering_names, clustering_algorithms):
         # predict cluster memberships
         t0 = time.time()
-        print t0
+        (t0)
         algorithm.fit(X)
         t1 = time.time()
-        print t1
+        (t1)
         if hasattr(algorithm, 'labels_'):
             y_pred = algorithm.labels_.astype(np.int)
         else:
@@ -136,7 +136,7 @@ for i_dataset, dataset in enumerate(datasets):
                  transform=plt.gca().transAxes, size=15,
                  horizontalalignment='right')
         plot_num += 1
-        print plot_num
+        print(plot_num)
 
 if not os.path.exists('classifications_figures/'):
     os.makedirs('classifications_figures/')

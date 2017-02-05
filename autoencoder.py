@@ -9,28 +9,27 @@ import hubbard_input_data
 starttime = time.localtime(time.time())
 gc.enable()
 
+U = 10
+tempMin = .18
+tempMax = .22
 
-data_file = 'Hubbard Data/N4x4x4_L200_U4_Mu0/*.stream'
-# data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U4_Mu0/*.stream'
+try:
+    data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*'
+except:
+    data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
 
-if data_file[:3] == 'Hub':
-    khatami_cluster = False
-else:
-    khatami_cluster = True
 
 mnist = hubbard_input_data.dataAndLabels(data_file)
-# mnist = hubbard_input_data.dataAndLabels('Hubbard Data/N4x4x4_L200_U12_Mu0/*.stream')
-# mnist = hubbard_input_data.dataAndLabels('/home/kchng/Quantum Machine Learning/N4x4x4_L200_U4_Mu0/*.stream')
 
-side_squared = len(mnist.test.images[0])
-side = int(np.sqrt(side_squared))
 # Parameters
 learning_rate = 0.1
 training_epochs = 1*1E2
 batch_size = 10
-
 layer_trials = [[200,100,10,5]]
 
+
+side_squared = len(mnist.test.images[0])
+side = int(np.sqrt(side_squared))
 
 def layer_batch_norm(x, n_out, phase_train):
     beta_init = tf.constant_initializer(value=0.0, dtype=tf.float32)
@@ -190,7 +189,7 @@ if __name__ == '__main__':
                         avg_cost += new_cost/total_batch
                     # Display logs per epoch step
                     if epoch % display_step == 0:
-                        print "Epoch:", '%04d' % (epoch+1), "of %d " %training_epochs , "cost =", "{:.9f}".format(avg_cost)
+                        print( "Epoch:", '%04d' % (epoch+1), "of %d " %training_epochs , "cost =", "{:.9f}".format(avg_cost))
 
                         # add training_summary to tensorboard
                         train_writer.add_summary(train_summary, sess.run(global_step))
@@ -200,7 +199,7 @@ if __name__ == '__main__':
                         val_writer.add_summary(in_im, sess.run(global_step))
                         val_writer.add_summary(out_im, sess.run(global_step))
                         val_writer.add_summary(val_summary, sess.run(global_step))
-                        print "Validation Loss:", validation_loss
+                        print("Validation Loss:", validation_loss)
 
                         # create model checkpoint saver
                         if not os.path.exists("hubbard_autoencoder_logs/" + filename):
@@ -209,9 +208,9 @@ if __name__ == '__main__':
                         saver.save(sess, "hubbard_autoencoder_logs/" + filename + "/model-checkpoint-" + '%04d' % (epoch+1), global_step=global_step)
                         saver.export_meta_graph('hubbard_meta_graphs/' + filename + '/autoencoder.meta')
 
-                print "Optimization Finished!"
+                print( "Optimization Finished!")
                 test_loss = sess.run(eval_op, feed_dict={x: mnist.test.images, phase_train: False})
-                print "Test Loss:", test_loss
+                print("Test Loss:", test_loss)
 
                 sess = tf.InteractiveSession()
                 tf.initialize_all_variables().run()
@@ -277,7 +276,7 @@ if __name__ == '__main__':
 
                     # evaulation loop, probably could be made faster if all in tensorflow
                     for i in range(len(all_images)):
-                        print '\n\n\n' ,float(i)*100. / len(all_images), '%', '\n\n\n'
+                        print( '\n\n\n' ,float(i)*100. / len(all_images), '%', '\n\n\n')
                         try:
                             image = tf.cast(all_images[i], tf.float32)
                             image = tf.reshape(image, [1,side_squared])
@@ -296,7 +295,7 @@ if __name__ == '__main__':
                             final_l3.append(After_l3)
                             final_l4.append(After_l4)
                         except:
-                            print 'something failed'
+                            print( 'something failed')
                     costs = [avg_cost, validation_loss, test_loss]
 
                     # saved data to file after having gone through NN up to each layer
@@ -308,7 +307,7 @@ if __name__ == '__main__':
                     np.savetxt('reduced_data/' + filename + '/AfterL3_' + filename + '.txt', final_l3, delimiter=' ')
                     np.savetxt('reduced_data/' + filename + '/AfterL4_' + filename + '.txt', final_l4, delimiter=' ')
                     np.savetxt('reduced_data/' + filename + '/Costs_'   + filename + '.txt', costs, delimiter=' ', header='avg_cost, validation_loss, test_loss')
-    print L1,L2,L3,L4
+    print( L1,L2,L3,L4)
 
 os.system("python bottlenecks.py")
 os.system("rm -rf hubbard_autoencoder_logs/")
@@ -316,5 +315,5 @@ os.system("rm -rf hubbard_meta_graphs/")
 os.system("python lowerDimensionEmbed.py")
 
 endtime = time.localtime(time.time())
-print time.asctime(starttime)
-print time.asctime(endtime)
+print( time.asctime(starttime))
+print( time.asctime(endtime))

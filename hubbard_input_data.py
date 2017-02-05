@@ -25,15 +25,15 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
         def next_batch(self, batch_size):
             start = self._index_in_epoch
             self._index_in_epoch += batch_size
-            print self._index_in_epoch, self._num_examples
+            # print self._index_in_epoch, self._num_examples
             if self._index_in_epoch > self._num_examples:
                 # Finished epoch
                 self._epochs_completed += 1
                 # Shuffle the data
                 perm = np.arange(self._num_examples)
                 np.random.shuffle(perm)
-                print perm
-                print self._images[perm]
+                # print perm
+                # print self._images[perm]
                 self._images = self._images[perm]
                 self._labels = self._labels[perm]
                 # Start next epoch
@@ -85,7 +85,7 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
             files2keep.append(counter)
             labels.append(label)
         counter += 1
-    print labels, ':tempertures'
+    print(labels, ':tempertures')
     square_len_fix = 700
     data = []
     files = np.take(files, files2keep)
@@ -96,7 +96,7 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
             temp = map(float,temp)
             data.append(temp)
 
-        print 'T =', labels[i], ' loaded'
+        print ('T =', labels[i], ' loaded')
 
     # shuffles what is training set vs test/validation
     # data = np.random.permutation(data)

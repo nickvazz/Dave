@@ -39,7 +39,7 @@ for L1, L2, L3, L4 in layer_trials:
 
             X = newX
             y = newDataLabels
-            print "\nLayer = %s" % layer
+            print("\nLayer = %s" % layer)
             #----------------------------------------------------------------------
             # Scale and visualize the embedding vectors
             def embedding(X):
@@ -141,6 +141,6 @@ for L1, L2, L3, L4 in layer_trials:
             plt.clf()
 
     except:
-        print 'failed to find layer', L1,L2,L3,L4
+        print('failed to find layer', L1,L2,L3,L4)
 # os.system('python classificationEmbed.py')
 os.system("python fanFitting.py")

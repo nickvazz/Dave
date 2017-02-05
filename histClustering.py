@@ -16,7 +16,7 @@ datasets = []
 for sets in data:
     datasets.append([np.asarray(zip(sets[0],sets[1])), np.asarray(sets[2])])
 
-print files
+print(files)
 X,y = datasets[which_data] #they are in alphabetical order PCA/randTrees/tSNE
 # X = StandardScaler().fit_transform(X)
 Len = len(X)
@@ -33,7 +33,7 @@ spectral = cluster.SpectralClustering(n_clusters=2,
 t0 = time.time()
 spectral.fit(X)
 t1 = time.time()
-print t1-t0
+print(t1-t0)
 y_pred = spectral.labels_.astype(np.int)
 f, axarr = plt.subplots(3)
 
@@ -57,13 +57,15 @@ n1, bins1, patches1 = plt.hist(clust1, 30, alpha=0.50, range=[.1,.4])
 
 # print n0, '\n', bins0, '\n'
 # print n1, '\n', bins1, '\n'
-print '\n'
-if bins1[0] > bins0[0]:
-    for item in zip(n0, bins0): print item
-    for item in zip(n1, bins1): print item
-else:
-    for item in zip(n1, bins1): print item
-    for item in zip(n0, bins0): print item
+# print '\n'
+
+# if bins1[0] > bins0[0]:
+#     for item in zip(n0, bins0): print item
+#     for item in zip(n1, bins1): print item
+# else:
+#     for item in zip(n1, bins1): print item
+#     for item in zip(n0, bins0): print item
+
 # print sorted(list(set(y)))
 
 # axarr[2].hist(clust0, 10, alpha=0.50, normed=1)

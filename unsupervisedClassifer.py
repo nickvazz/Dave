@@ -79,7 +79,7 @@ for j in range(len(datasets_total)):
     try:
         datasets = datasets_total[j]
         for i_dataset, dataset in enumerate(datasets):
-            print i_dataset
+            # print(i_dataset)
             X, y = dataset
             # normalize dataset for easier parameter selection
             X = StandardScaler().fit_transform(X)
