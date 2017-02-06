@@ -13,7 +13,7 @@ tempMins = [.18,.22,.29,.32,.38,.30,.29,.26,.22,.18]
 tempMaxs = [.22,.27,.34,.37,.42,.35,.34,.31,.27,.22]
 
 
-for U in [8]
+for U in [8]:
     for i in range(10):
 
         tempRange = False
@@ -76,8 +76,9 @@ for U in [8]
                     # plt.style.use('bmh')
                     # plt.style.use('ggplot')
                     # plt.style.use('dark_background')
+#		    print('this far')
                     plt.figure(figsize=(30,10))
-
+		    print('thisfar')
                     # Projection on to the first 2 principal components
                     print("Computing PCA projection")
                     t0 = time()

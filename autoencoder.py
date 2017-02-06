@@ -15,7 +15,7 @@ tempMaxs = [.22,.27,.34,.37,.42,.35,.34,.31,.27,.22]
 
 tempRange = False
 
-for U in [8]
+for U in [8]:
     for i in range(10):
         run_num = i + 1
         run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
