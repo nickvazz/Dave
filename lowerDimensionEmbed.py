@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from matplotlib import offsetbox
 from sklearn import (manifold, datasets, decomposition, ensemble,
                      discriminant_analysis, random_projection)
-from StringIO import StringIO
 import random
 
 Us = [4,5,6,8,9,10,12,14,16,20]
@@ -78,7 +77,7 @@ for U in [8]:
                     # plt.style.use('dark_background')
 #		    print('this far')
                     plt.figure(figsize=(30,10))
-		    print('thisfar')
+                    print('thisfar')
                     # Projection on to the first 2 principal components
                     print("Computing PCA projection")
                     t0 = time()
