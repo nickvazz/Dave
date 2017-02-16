@@ -12,14 +12,15 @@ tempMins = [.18,.22,.29,.32,.38,.30,.29,.26,.22,.18]
 tempMaxs = [.22,.27,.34,.37,.42,.35,.34,.31,.27,.22]
 
 
-for U in [8]:
+# for U in [8,9]:
+for U in Us:
     for i in range(10):
-
         tempRange = False
         run_num = i + 1
 
         run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 
+        print(run_str)
 
         batch_size = 10
         learning_rate = 0.1
@@ -75,9 +76,9 @@ for U in [8]:
                     # plt.style.use('bmh')
                     # plt.style.use('ggplot')
                     # plt.style.use('dark_background')
-#		    print('this far')
-                    plt.figure(figsize=(30,10))
-                    print('thisfar')
+                    # print('this far')
+                    # plt.figure(figsize=(30,10))
+                    # print('thisfar')
                     # Projection on to the first 2 principal components
                     print("Computing PCA projection")
                     t0 = time()
@@ -85,7 +86,7 @@ for U in [8]:
                     xs, ys = embedding(X_pca)
                     np.savetxt(embed_folder_path + '/pca.txt', (xs,ys,y), fmt='%10.5f')
                     # plotting(xs,ys,"PCA",1,4) # with hist
-                    plotting(xs,ys,"PCA",1,50) # no hist
+                    # plotting(xs,ys,"PCA",1,50) # no hist
                     print ("(time %.2fs)" % (time() - t0))
 
                     #
@@ -100,59 +101,59 @@ for U in [8]:
                     xs, ys = embedding(X_reduced)
                     np.savetxt(embed_folder_path + '/randTrees.txt', (xs,ys,y), fmt='%10.5f')
                     # plotting(xs,ys,"Random Forest",7,10) # with hist
-                    plotting(xs,ys,"Random Forest",2,50) # no hist
+                    # plotting(xs,ys,"Random Forest",2,50) # no hist
                     print("(time %.2fs)" %(time() - t0))
 
-                    # # Spectral embedding of the digits dataset
-                    # print("Computing Spectral embedding")
-                    # embedder = manifold.SpectralEmbedding(n_components=2, random_state=0, eigen_solver="arpack")
-                    # t0 = time()
-                    # X_se = embedder.fit_transform(X)
-                    # xs, ys = embedding(X_se)
-                    # np.savetxt(embed_folder_path + 'spectral.txt', (xs,ys,y), fmt='%10.5f')
-                    # # plotting(xs,ys,"Spectral",8,11) # with hist
+                    # Spectral embedding of the digits dataset
+                    print("Computing Spectral embedding")
+                    embedder = manifold.SpectralEmbedding(n_components=2, random_state=0, eigen_solver="arpack")
+                    t0 = time()
+                    X_se = embedder.fit_transform(X)
+                    xs, ys = embedding(X_se)
+                    np.savetxt(embed_folder_path + 'spectral.txt', (xs,ys,y), fmt='%10.5f')
+                    # plotting(xs,ys,"Spectral",8,11) # with hist
                     # plotting(xs,ys,"Spectral",5,50) # no hist
-                    # print("(time %.2fs)" % (time() - t0))
+                    print("(time %.2fs)" % (time() - t0))
 
-                    # # t-SNE embedding of the digits dataset
-                    # print("Computing t-SNE embedding")
-                    # tsne = manifold.TSNE(n_components=2, init='pca', random_state=0, n_iter=1000, verbose=4)
-                    # t0 = time()
-                    # X_tsne = tsne.fit_transform(X)
-                    # xs, ys = embedding(X_tsne)
-                    # np.savetxt(embed_folder_path + '/tsne.txt', (xs,ys,y), fmt='%10.5f')
-                    # # plotting(xs,ys,"t-SNE",9,12) # with hist
+                    # t-SNE embedding of the digits dataset
+                    print("Computing t-SNE embedding")
+                    tsne = manifold.TSNE(n_components=2, init='pca', random_state=0, n_iter=1000, verbose=4)
+                    t0 = time()
+                    X_tsne = tsne.fit_transform(X)
+                    xs, ys = embedding(X_tsne)
+                    np.savetxt(embed_folder_path + '/tsne.txt', (xs,ys,y), fmt='%10.5f')
+                    # plotting(xs,ys,"t-SNE",9,12) # with hist
                     # plotting(xs,ys,"t-SNE",3,50) # no hist
-                    # print("(time %.2fs)" % (time() - t0))
+                    print("(time %.2fs)" % (time() - t0))
 
-                    # # # Isomap projection of the digits dataset
-                    # print("Computing Isomap embedding")
-                    # t0 = time()
-                    # n_neighbors = 30
-                    # X_iso = manifold.Isomap(n_neighbors,n_components=2, n_jobs=-1).fit_transform(X)
-                    # xs, ys = embedding(X_iso)
-                    # np.savetxt(embed_folder_path + '_isomap.txt', (xs,ys,y), fmt='%10.5f')
-                    # # plotting(xs,ys,"Isomap",2,5) # with hist
+                    # # Isomap projection of the digits dataset
+                    print("Computing Isomap embedding")
+                    t0 = time()
+                    n_neighbors = 30
+                    X_iso = manifold.Isomap(n_neighbors,n_components=2, n_jobs=-1).fit_transform(X)
+                    xs, ys = embedding(X_iso)
+                    np.savetxt(embed_folder_path + '_isomap.txt', (xs,ys,y), fmt='%10.5f')
+                    # plotting(xs,ys,"Isomap",2,5) # with hist
                     # plotting(xs,ys,"Isomap",4,50) # no hist
-                    # print("(time %.2fs)" % (time() - t0))
+                    print("(time %.2fs)" % (time() - t0))
 
-                    # # MDS  embedding of the digits dataset
-                    # print("Computing MDS embedding")
-                    # clf = manifold.MDS(n_components=2, n_init=1, max_iter=1000, n_jobs=-1, verbose=4)
-                    # t0 = time()
-                    # X_mds = clf.fit_transform(X)
-                    # print("Stress: %f" % clf.stress_)
-                    # xs, ys = embedding(X_mds)
-                    # np.savetxt(embed_folder_path + '_mds.txt', (xs,ys,y), fmt='%10.5f')
+                    # MDS  embedding of the digits dataset
+                    print("Computing MDS embedding")
+                    clf = manifold.MDS(n_components=2, n_init=1, max_iter=1000, n_jobs=-1, verbose=4)
+                    t0 = time()
+                    X_mds = clf.fit_transform(X)
+                    print("Stress: %f" % clf.stress_)
+                    xs, ys = embedding(X_mds)
+                    np.savetxt(embed_folder_path + '_mds.txt', (xs,ys,y), fmt='%10.5f')
                     # plotting(xs,ys,"MDS",6,50) # no hist
-                    # # plotting(xs,ys,"MDS",3,6) # with hist
-                    # print("(time %.2fs)" % (time() - t0))
+                    # plotting(xs,ys,"MDS",3,6) # with hist
+                    print("(time %.2fs)" % (time() - t0))
 
                     if not os.path.exists(run_str + 'layer_figures/' + trial):
                         os.makedirs(run_str + 'layer_figures/' + trial)
-                    plt.savefig(run_str + 'layer_figures/' + trial + '/layer' + str(layer) + '_' + str(len(X)) +'.png')
-                    plt.clf()
-
+                    # plt.savefig(run_str + 'layer_figures/' + trial + '/layer' + str(layer) + '_' + str(len(X)) +'.png')
+                #     plt.clf()
+                # plt.clf()
             except:
                 print('failed to find layer', L1,L2,L3,L4)
         # os.system('python classificationEmbed.py')
