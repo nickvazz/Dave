@@ -85,7 +85,7 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
             files2keep.append(counter)
             labels.append(label)
         counter += 1
-    print(labels, ':tempertures')
+    # print(labels, ':tempertures')
     square_len_fix = 700
     data = []
     files = np.take(files, files2keep)
@@ -93,13 +93,12 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
         aFile = open(files[i], 'r')
         for line in aFile:
             temp = list(line[:-(13+700)]) + [labels[i]]
-            temp = map(float,temp)
+            temp = list(map(float,temp))
+            # temp = [*map(float,temp)]
             data.append(temp)
 
         print ('T =', labels[i], ' loaded')
 
-    # shuffles what is training set vs test/validation
-    # data = np.random.permutation(data)
     for i in range(len(data)):
         label = float(data[i][-1])
         dataval = data[i][:-1]
