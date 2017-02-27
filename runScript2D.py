@@ -30,10 +30,10 @@ def run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, laye
                      + ' -WP ' + str(WhichPlots)
     print(flag_string)
 
-    os.system('python3 autoencoder.py' + flag_string)
-    # os.system('python3 bottlenecks.py' + flag_string)
-    # os.system('python3 lowerDimensionEmbed.py' + plot_flag_string)
-    # os.system('python3 fanFitting.py' + plot_flag_string)
+    os.system('python2 autoencoder.py' + flag_string)
+    # os.system('python2 bottlenecks.py' + flag_string)
+    # os.system('python2 lowerDimensionEmbed.py' + plot_flag_string)
+    # os.system('python2 fanFitting.py' + plot_flag_string)
 
 # for runs in range(1,11):
 for runs in range(1,runs+1):
