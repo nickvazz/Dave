@@ -7,16 +7,15 @@ learning_rate = 0.1
 training_epochs = 100
 batch_size = 10
 layer_trials = '200,100,10,5'
-ZoomTemps = False
-Tmin = 0.2
-Tmax = 0.22
+ZoomTemps = True
+Tmin = 0.28
+Tmax = 0.35
 plotOn = True
-WhichPlots = '1,2,3'
+WhichPlots = '1,2'
 
 def run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, layer_trials, ZoomTemps, Tmin, Tmax, plotOn, WhichPlots):
     flag_string = ' -U ' + str(U) \
                 + ' -R ' + str(runs) \
-                + ' -DataDim ' + str(dataDimension) \
                 + ' -LR ' + str(learning_rate) \
                 + ' -TE ' + str(training_epochs) \
                 + ' -BS ' + str(batch_size) \
@@ -30,10 +29,10 @@ def run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, laye
                      + ' -WP ' + str(WhichPlots)
     print(flag_string)
 
-    os.system('python2 autoencoder.py' + flag_string)
-    # os.system('python2 bottlenecks.py' + flag_string)
-    # os.system('python2 lowerDimensionEmbed.py' + plot_flag_string)
-    # os.system('python2 fanFitting.py' + plot_flag_string)
+    # os.system('python2 autoencoder.py' + flag_string # + ' -DataDim ' + str(dataDimension) )
+    os.system('python3 bottlenecks.py' + flag_string + ' -DataDim ' + str(dataDimension))
+    os.system('python3 lowerDimensionEmbed.py' + plot_flag_string)
+    os.system('python3 fanFitting.py' + plot_flag_string)
 
 # for runs in range(1,11):
 for runs in range(1,runs+1):
