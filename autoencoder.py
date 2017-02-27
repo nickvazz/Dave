@@ -9,7 +9,7 @@ import hubbard_input_data
 starttime = time.localtime(time.time())
 gc.enable()
 
-parser = argparse.ArgumentParser(description='Description of your program')
+parser = argparse.ArgumentParser(description='Hubbard Unsupervised Model')
 parser.add_argument('-U','--U', help='U to train', required=True)
 parser.add_argument('-R', '--Runs', help='Run Number', required=True)
 parser.add_argument('-LR', '--LearningRate', help='', required=True)
@@ -19,6 +19,7 @@ parser.add_argument('-LT', '--LayerTrials', help='L1,L2,L3,L4', required=True)
 parser.add_argument('-ZT', '--ZoomTemps', help='Zoom in on temps = True/False', required=True)
 parser.add_argument('-Tmin', '--TempMin', help='Min temp to load from data', required=True)
 parser.add_argument('-Tmax', '--TempMax', help='Max temp to load from data', required=True)
+parser.add_argument('-DataDim', '--DataDimension', help='Use 2D or 3D data', required=True)
 args = vars(parser.parse_args())
 
 U = args['U']
@@ -30,6 +31,7 @@ layer_trials = [map(int, args['LayerTrials'].split(','))]
 tempRange = eval(args['ZoomTemps'])
 tempMin = float(args['TempMin'])
 tempMax = float(args['TempMax'])
+dataDimension = args['DataDimension']
 
 # run_num = 1
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
@@ -37,11 +39,14 @@ run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 if not os.path.exists(run_str):
     os.makedirs(run_str)
 
-try:
-    data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
-except:
-    data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
-    print('khatami_cluster')
+if dataDimension == '3D':
+    try:
+        data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
+    except:
+        data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
+        print('khatami_cluster')
+elif dataDimension == '2D':
+    data_file = 'N10x10_L200_U8_Mu0/*.stream'
 
 if tempRange == True:
     mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin, tempMax=tempMax)
@@ -163,7 +168,6 @@ if __name__ == '__main__':
         filename_p1 = str(n_encoder_hidden_1)+'_'+str(n_encoder_hidden_2)+'_'+str(n_encoder_hidden_3)+'_'
         filename_p2 = str(n_code)+'_'+str(batch_size)+'_'+str(learning_rate)+'_'+str(int(training_epochs))
         filename = filename_p1 + filename_p2
-
 
         with tf.Graph().as_default():
             with tf.variable_scope("autoencoder_model"):

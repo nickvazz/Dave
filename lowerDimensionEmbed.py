@@ -33,7 +33,7 @@ tempMin = float(args['TempMin'])
 tempMax = float(args['TempMax'])
 plotOn = eval(args['Plotting'])
 whichPlots = list(map(int, args['WhichPlots'].split(',')))
-print(whichPlots)
+# print(whichPlots)
 
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 random.seed(10)
@@ -73,9 +73,9 @@ for L1, L2, L3, L4 in layer_trials:
                 return (xs, ys)
 
             def plotting(xs, ys, title, a, b):
-                # plt.subplot(1,3,a)
-                plt.subplot(1,2,a) # no t-SNE
-                plt.scatter(xs,ys, c=y, cmap=plt.cm.get_cmap("plasma",50))
+                plt.subplot(1,len(whichPlots),a)
+                # plt.subplot(1,2,a) # no t-SNE
+                plt.scatter(xs,ys, c=y, s=10, cmap=plt.cm.get_cmap("jet",50))
                 plt.colorbar(ticks=range(0,2,1))
                 plt.xticks([]), plt.yticks([])
                 if title is not None:
@@ -101,7 +101,8 @@ for L1, L2, L3, L4 in layer_trials:
                 # Random Trees embedding of the digits dataset
                 print("Computing Totally Random Trees embedding")
                 # hasher = ensemble.RandomTreesEmbedding(n_estimators=1000, random_state=0, max_depth=10, n_jobs=-1, verbose=3)
-                hasher = ensemble.RandomTreesEmbedding(n_estimators=1000, random_state=0, max_depth=10, n_jobs=-1)
+                hasher = ensemble.RandomTreesEmbedding(n_estimators=1000, random_state=0, max_depth=10, n_jobs=-1) # regular
+                # hasher = ensemble.RandomTreesEmbedding(n_estimators=1000, random_state=0, max_depth=2, n_jobs=-1, min_impurity_split=1e2)
                 t0 = time()
                 X_transformed = hasher.fit_transform(X)
                 pca = decomposition.TruncatedSVD(n_components=2)

@@ -5,7 +5,8 @@ classifications_figures/
 Hubbard Data
 run*/
 nohup.out
-
+N10*
+N10*/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

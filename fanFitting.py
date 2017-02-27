@@ -63,9 +63,9 @@ def plotting(U, L, embedding):
             fit_ys.append(yval)
         slopes.append(slope)
 
-        color = 'cool'
-        plt.scatter(xs,ys,color=cm.Set3(norm(temp)),s=1.5, label='')
-        plt.plot(fit_xs, fit_ys, label=temp, c=cm.Set3(norm(temp)),linewidth=2) #, c=cm.cool(temp))
+        color = 'Vega20b'
+        plt.scatter(xs,ys,color=cm.jet(norm(temp)),s=1.5, label='')
+        plt.plot(fit_xs, fit_ys, label=temp, c=cm.jet(norm(temp)),linewidth=2) #, c=cm.cool(temp))
 
     plt.title('U' + str(U) + ' L' + str(L) + ' ' + embedding)
     plt.legend(loc='upper left')

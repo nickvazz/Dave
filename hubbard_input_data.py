@@ -54,24 +54,26 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
 
     files = glob.glob(folder_name)
 
-    if folder_name[:3] == 'Hub':
-        khatami_cluster = False
-    else:
-        khatami_cluster = True
-
     labels = []
     files2keep = []
     counter = 0
     for thing in files:
         # if it says "ValueError: could not convert string to float: _T0.03"
         # near this line, chance a/b in the thing[a:b]
-        if khatami_cluster == True:
+        if folder_name[:3] == 'Hub':
             try:
                 label_temp = thing[76:90].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
             except:
                 label_temp = thing[78:90].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
+
+        elif folder_name[:3] == 'N10':
+            try:
+                label_temp = thing[39:45].split('.')[0:2]
+                label = float(label_temp[0] + '.' + label_temp[1])
+            except:
+                print('2D failed')
         else:
             try:
                 label_temp = thing[53:57].split('.')[0:2]
@@ -92,10 +94,18 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
     for i in range(len(files)):
         aFile = open(files[i], 'r')
         for line in aFile:
-            temp = list(line[:-(13+700)]) + [labels[i]]
-            temp = list(map(float,temp))
-            # temp = [*map(float,temp)]
-            data.append(temp)
+            if folder_name[:3] == 'Hub':
+                temp = list(line[:-(13+700)]) + [labels[i]]
+                temp = list(map(float,temp))
+                # temp = [*map(float,temp)]
+                data.append(temp)
+            elif folder_name[:3] == 'N10':
+                temp = list(line[:-(13+119)]) + [labels[i]]
+                # print(len(temp))
+                # print(len(temp)**.5)
+                temp = list(map(float,temp))
+
+                data.append(temp)
 
         print ('T =', labels[i], ' loaded')
 
