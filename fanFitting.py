@@ -18,6 +18,8 @@ parser.add_argument('-WP','--WhichPlots', help='Which specific plots', required=
 parser.add_argument('-ZT', '--ZoomTemps', help='Zoom in on temps = True/False', required=True)
 parser.add_argument('-Tmin', '--TempMin', help='Min temp to load from data', required=True)
 parser.add_argument('-Tmax', '--TempMax', help='Max temp to load from data', required=True)
+parser.add_argument('-ChangeVar', '--ChangingVar', help='Changing Variable in Dataset', required=True)
+parser.add_argument('-DataFile', '--DataFile', help='Path to Data File', required=True)
 
 args = vars(parser.parse_args())
 
@@ -32,6 +34,8 @@ tempMin = float(args['TempMin'])
 tempMax = float(args['TempMax'])
 plotOn = eval(args['Plotting'])
 whichPlots = args['WhichPlots']
+changingVar = args['ChangingVar']
+data_file = args['DataFile'] + '*.stream'
 
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 
@@ -44,9 +48,9 @@ def plotting(U, L, embedding):
     data = np.loadtxt(run_str + 'embedded_data/200_100_10_5_10_0.1_100/AfterL' + str(L) + '/randTrees.txt')
 
     df = pd.DataFrame(data=data).T
-    df.columns = ['x','y','T']
-    df.sort_values('T', inplace=True)
-    temps = sorted(list(set(df['T'])))
+    df.columns = ['x','y',changingVar]
+    df.sort_values(changingVar, inplace=True)
+    temps = sorted(list(set(df[changingVar])))
 
     fit_xs = np.arange(0,1.01,0.01)
     plt.figure(figsize=(10,10))
@@ -54,8 +58,8 @@ def plotting(U, L, embedding):
     slopes = []
 
     for temp in temps:
-        xs = df.loc[df['T'] == temp]['x']
-        ys = df.loc[df['T'] == temp]['y']
+        xs = df.loc[df[changingVar] == temp]['x']
+        ys = df.loc[df[changingVar] == temp]['y']
         slope, intercept, r_val, p_val, std_err = stats.linregress(xs,ys)
         fit_ys = []
         for xval in fit_xs:
@@ -77,7 +81,7 @@ def plotting(U, L, embedding):
         angle_diff.append(dif)
 
     for i in range(len(angle_diff)):
-        txt = r'$\angle$' + ' T = ' + str(temps[i+1]) + ' & ' + str(temps[i]) + ' : ' + str(round(angle_diff[i], 2)) + r'$\degree$'
+        txt = r'$\angle$ ' + changingVar + ' = ' + str(temps[i+1]) + ' & ' + str(temps[i]) + ' : ' + str(round(angle_diff[i], 2)) + r'$\degree$'
         plt.annotate(txt, xy=(0.05, .2-(i*.025)), xycoords='axes fraction',size=8)
     # plt.savefig('U' + str(U) + '_' + str(L) + '_' + embedding + '_deep.png')
     # plt.savefig('Random_Tree_Fits/U' + str(U) + '_' + str(L) + '_' + embedding + '.png')

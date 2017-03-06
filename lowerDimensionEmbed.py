@@ -19,6 +19,9 @@ parser.add_argument('-WP','--WhichPlots', help='Which specific plots', required=
 parser.add_argument('-ZT', '--ZoomTemps', help='Zoom in on temps = True/False', required=True)
 parser.add_argument('-Tmin', '--TempMin', help='Min temp to load from data', required=True)
 parser.add_argument('-Tmax', '--TempMax', help='Max temp to load from data', required=True)
+parser.add_argument('-ChangeVar', '--ChangingVar', help='Changing Variable in Dataset', required=True)
+parser.add_argument('-DataFile', '--DataFile', help='Path to Data File', required=True)
+
 
 args = vars(parser.parse_args())
 
@@ -33,6 +36,7 @@ tempMin = float(args['TempMin'])
 tempMax = float(args['TempMax'])
 plotOn = eval(args['Plotting'])
 whichPlots = list(map(int, args['WhichPlots'].split(',')))
+data_file = args['DataFile'] + '*.stream'
 # print(whichPlots)
 
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'

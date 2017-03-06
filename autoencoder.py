@@ -20,6 +20,9 @@ parser.add_argument('-ZT', '--ZoomTemps', help='Zoom in on temps = True/False', 
 parser.add_argument('-Tmin', '--TempMin', help='Min temp to load from data', required=True)
 parser.add_argument('-Tmax', '--TempMax', help='Max temp to load from data', required=True)
 parser.add_argument('-DataDim', '--DataDimension', help='Use 2D or 3D data', required=True)
+parser.add_argument('-ChangeVar', '--ChangingVar', help='Changing Variable in Dataset', required=True)
+parser.add_argument('-DataFile', '--DataFile', help='Path to Data File', required=True)
+
 args = vars(parser.parse_args())
 
 U = args['U']
@@ -32,6 +35,8 @@ tempRange = eval(args['ZoomTemps'])
 tempMin = float(args['TempMin'])
 tempMax = float(args['TempMax'])
 dataDimension = args['DataDimension']
+changingVar = args['ChangingVar']
+data_file = args['DataFile'] + '*.stream'
 
 # run_num = 1
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
@@ -39,21 +44,10 @@ run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 if not os.path.exists(run_str):
     os.makedirs(run_str)
 
-if dataDimension == '3D':
-    try:
-        data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
-    except:
-        data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
-        print('khatami_cluster')
-elif dataDimension == '2D':
-    data_file = 'N10x10_L200_U8_Mu0/*.stream'
-
 if tempRange == True:
-    mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin, tempMax=tempMax)
+    mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin, tempMax=tempMax, changingVar=changingVar)
 else:
-    mnist = hubbard_input_data.dataAndLabels(data_file)
-
-
+    mnist = hubbard_input_data.dataAndLabels(data_file, changingVar=changingVar)
 
 side_squared = len(mnist.test.images[0])
 side = int(np.sqrt(side_squared))
@@ -331,13 +325,10 @@ if __name__ == '__main__':
                     np.savetxt(run_str + 'reduced_data/' + filename + '/AfterL3_' + filename + '.txt', final_l3, delimiter=' ')
                     np.savetxt(run_str + 'reduced_data/' + filename + '/AfterL4_' + filename + '.txt', final_l4, delimiter=' ')
                     np.savetxt(run_str + 'reduced_data/' + filename + '/Costs_'   + filename + '.txt', costs, delimiter=' ', header='avg_cost, validation_loss, test_loss')
-    # print( L1,L2,L3,L4)
 
-# os.system("python bottlenecks.py")
 os.system("rm -rf hubbard_autoencoder_logs/")
 os.system("rm -rf hubbard_meta_graphs/")
 
-
 endtime = time.localtime(time.time())
-print( time.asctime(starttime))
-print( time.asctime(endtime))
+print(time.asctime(starttime))
+print(time.asctime(endtime))
