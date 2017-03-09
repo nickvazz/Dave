@@ -45,7 +45,7 @@ if not os.path.exists(run_str):
     os.makedirs(run_str)
 
 if tempRange == True:
-    mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin, tempMax=tempMax, changingVar=changingVar)
+    mnist = hubbard_input_data.dataAndLabels(data_file, ZoomTemps=True, tempMin=tempMin, tempMax=tempMax, changingVar=changingVar)
 else:
     mnist = hubbard_input_data.dataAndLabels(data_file, changingVar=changingVar)
 

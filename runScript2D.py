@@ -23,13 +23,13 @@ batch_size = 10
 # layers = ['100,36,25,9','200,100,10,5','200,100,50,25']
 layers = ['200,100,10,5']
 ZoomTemps = True
-Tmin = 2.0
-Tmax = 2.5
+Tmin = 0
+Tmax = 0.08
 plotOn = True
 WhichPlots = '1,2'
-changingVar = 'Mu' # 'Mu' or 'T'
-data_file = 'N4x4x4_L200_U9_T0.32/'
-# data_file = 'N10x10_L200_U8_Mu0/'
+# changingVar = 'T' # 'Mu' or 'T'
+data_file = 'N10x10_L200_U8_Mu0/'; changingVar = 'T'
+# data_file = 'N4x4x4_L200_U9_T0.32/'; changingVar = 'Mu'
 # data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/'
 # data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/'
 

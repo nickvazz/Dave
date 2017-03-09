@@ -37,7 +37,7 @@ data_file = args['DataFile'] + '*.stream'
 run_str = 'run' + str(run_num) + '_U' + str(U) + '/'
 
 if tempRange == True:
-    mnist = hubbard_input_data.dataAndLabels(data_file, tempMin=tempMin, tempMax=tempMax, changingVar=changingVar)
+    mnist = hubbard_input_data.dataAndLabels(data_file, ZoomTemps=True, tempMin=tempMin, tempMax=tempMax, changingVar=changingVar)
 else:
     mnist = hubbard_input_data.dataAndLabels(data_file, changingVar=changingVar)
 
