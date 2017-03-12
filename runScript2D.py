@@ -24,14 +24,14 @@ batch_size = 10
 layers = ['200,100,10,5']
 ZoomTemps = True
 Tmin = 0
-Tmax = 0.08
+Tmax = 0.13
 plotOn = True
 WhichPlots = '1,2'
 # changingVar = 'T' # 'Mu' or 'T'
-data_file = 'N10x10_L200_U8_Mu0/'; changingVar = 'T'
+# data_file = 'N10x10_L200_U8_Mu0/'; changingVar = 'T'
 # data_file = 'N4x4x4_L200_U9_T0.32/'; changingVar = 'Mu'
 # data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/'
-# data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/'
+data_file = 'Hubbard_Data/N4x4x4_L200_U' + str(U) + '_Mu0/'; changingVar = 'T'
 
 def run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, layer_trials, ZoomTemps, Tmin, Tmax, plotOn, WhichPlots, changingVar, data_file):
     flag_string = ' -U ' + str(U) \

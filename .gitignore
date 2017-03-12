@@ -100,3 +100,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+Layer4check.png
+hubbard_autoencoder_logs/
+tempDropCheck.png

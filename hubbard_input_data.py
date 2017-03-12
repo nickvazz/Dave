@@ -1,4 +1,4 @@
-import glob, re
+import glob, re, gc
 import numpy as np
 import pandas as pd
 
@@ -44,8 +44,6 @@ def dataAndLabels(folder_name, ZoomTemps=False, tempMin=0, tempMax=10, changingV
             end = self._index_in_epoch
             return self._images[start:end], self._labels[start:end]
 
-    allData = []
-    allLabels = []
     dataTrain = []
     dataTest = []
     dataValidation = []
@@ -55,13 +53,9 @@ def dataAndLabels(folder_name, ZoomTemps=False, tempMin=0, tempMax=10, changingV
 
     files = glob.glob(folder_name)
 
-
-    labels = []
-    files2keep = []
     counter = 0
     FullDataSet = pd.DataFrame()
     for thing in files:
-    # for thing in files[:3]:
         if changingVar == 'T':
             newThing = re.split('[|_ |, |. |/]',thing)[-4:-2]
             label = float(newThing[0][1:] + '.' + newThing[1])
@@ -71,33 +65,42 @@ def dataAndLabels(folder_name, ZoomTemps=False, tempMin=0, tempMax=10, changingV
             str2 = thing.split('.')[2][:1]
             label = float(str1 + '.' + str2)
 
-        if ZoomTemps == True:
-            if tempMin <= label <= tempMax:
-                files2keep.append(counter)
-                labels.append(label)
+        if tempMin <= label <= tempMax and ZoomTemps:
+            currentFile = thing
+            df = pd.DataFrame(pd.read_csv(currentFile))
+
+            df.columns = ['data']
+            df['label'] = np.full(len(df['data']), label)
+            df['fixedData'] = df['data'].str[:-(12)]#.str.split(pat='')
+            df['fixedData'] = list(map(list,df['fixedData']))
+
+            newFixedData = []
+            for i in range(len(df['data'])):
+                newFixedData.append(list(map(float,df['fixedData'][i])))
+            df['fixedData'] = newFixedData
+
+            FullDataSet = FullDataSet.append(df)
+
+
+            print (changingVar + ' =', label, ' loaded')
+            gc.collect()
+            print(len(df['fixedData']))
+            print(len(df['fixedData'][0]))
         else:
-            labels.append(label)
-            files2keep.append(counter)
-        counter += 1
+            print (changingVar + ' =', round(label,2), ' not loaded')
 
-        currentFile = thing
-        df = pd.DataFrame(pd.read_csv(currentFile))
-        df.columns = ['data']
-        df['label'] = np.full(len(df['data']), label)
-        df['fixedData'] = df['data'].str[:-(12)]#.str.split(pat='')
+        df = pd.DataFrame()
 
-        df['fixedData'] = list(map(list,df['fixedData']))
-        newFixedData = []
-        for i in range(len(df['data'])):
-            newFixedData.append(list(map(float,df['fixedData'][i])))
-        df['fixedData'] = newFixedData
-        FullDataSet = FullDataSet.append(df)
 
-        print (changingVar + ' =', label, ' loaded')
+    # print(pd.read_hdf('data.h5', '0.06').head()[0])
+    # print(len(pd.read_hdf('data.h5', '0.06').head()[0]))
+    # print(len(pd.read_hdf('data.h5', '0.06').head()[0][:-1]))
+    # print(len(pd.read_hdf('data.h5', '0.06').head()[0][:-2]))
 
     FullDataSet = FullDataSet.sample(frac=1, random_state=1).reset_index(drop=True) # shuffles dataFrame
-    FullDataSet = FullDataSet[FullDataSet['label'] <= tempMax]
-    FullDataSet = FullDataSet[FullDataSet['label'] >= tempMin]
+    if ZoomTemps == True:
+        FullDataSet = FullDataSet[FullDataSet['label'] <= tempMax]
+        FullDataSet = FullDataSet[FullDataSet['label'] >= tempMin]
 
     dataLen = len(FullDataSet['label'])
 
@@ -116,46 +119,3 @@ def dataAndLabels(folder_name, ZoomTemps=False, tempMin=0, tempMax=10, changingV
     data_sets.test = DataSet(dataTest, labelsTest)
 
     return data_sets
-
-
-
-    # data = []
-    # files = np.take(files, files2keep)
-    #
-    # for i in range(len(files)):
-    #     aFile = open(files[i], 'r')
-    #     for line in aFile:
-    #
-    #         temp = list(line[:-(13+700)]) + [labels[i]]
-    #         temp = list(map(float,temp))
-    #         # temp = [*map(float,temp)]
-    #         data.append(temp)
-    #
-    #     aFile.close()
-    #     print (changingVar + ' =', labels[i], ' loaded')
-    #
-    # for i in range(len(data)):
-    #     label = float(data[i][-1])
-    #     dataval = data[i][:-1]
-    #
-    #     if i < len(data) * 0.7:
-    #         labelsTrain.append(label)
-    #         dataTrain.append(dataval)
-    #
-    #     elif 0.7 * len(data) < i < 0.8 * len(data):
-    #         labelsValidation.append(label)
-    #         dataValidation.append(dataval)
-    #
-    #     else:
-    #         dataTest.append(dataval)
-    #         labelsTest.append(label)
-    #
-    #     allLabels.append(label)
-    #     allData.append(dataval)
-    #
-    # data_sets = DataSet([],[])
-    # data_sets.train = DataSet(dataTrain, labelsTrain)
-    # data_sets.validation = DataSet(dataValidation, labelsTrain)
-    # data_sets.test = DataSet(dataTest, labelsTest)
-    #
-    # return data_sets
