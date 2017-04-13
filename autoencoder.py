@@ -42,9 +42,10 @@ if not os.path.exists(run_str):
 if dataDimension == '3D':
     try:
         data_file = 'Hubbard Data/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
+        # print('right data')
     except:
         data_file = '/home/kchng/Quantum Machine Learning/N4x4x4_L200_U' + str(U) + '_Mu0/*.stream'
-        print('khatami_cluster')
+        # print('khatami_cluster')
 elif dataDimension == '2D':
     data_file = 'N10x10_L200_U8_Mu0/*.stream'
 
@@ -187,7 +188,9 @@ if __name__ == '__main__':
                 train_op = training(cost, global_step)
                 eval_op, in_im_op, out_im_op, val_summary_op = evaluate(output, x)
 
-                sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+                # sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+                sess = tf.Session(config=tf.ConfigProto())
+
 
                 # create graphs for tensorboard
                 train_writer = tf.train.SummaryWriter("hubbard_autoencoder_logs/" + filename + '/', graph=sess.graph)
@@ -213,8 +216,10 @@ if __name__ == '__main__':
                         avg_cost += new_cost/total_batch
                     # Display logs per epoch step
                     if epoch % display_step == 0:
-                        print( "Epoch:", '%04d' % (epoch+1), "of %d " %training_epochs , "cost =", "{:.9f}".format(avg_cost))
-
+                        # print( "\rEpoch:", '%04d' % (epoch+1), "of %d " %training_epochs , "cost =", "{:.9f}".format(avg_cost))
+                        sys.stdout.flush()
+                        sys.stdout.write('\r' + str(epoch) + ' epochs of ' + str(training_epochs))
+                        sys.stdout.flush()
                         # add training_summary to tensorboard
                         train_writer.add_summary(train_summary, sess.run(global_step))
 
@@ -223,7 +228,7 @@ if __name__ == '__main__':
                         val_writer.add_summary(in_im, sess.run(global_step))
                         val_writer.add_summary(out_im, sess.run(global_step))
                         val_writer.add_summary(val_summary, sess.run(global_step))
-                        print("Validation Loss:", validation_loss)
+                        # print("Validation Loss:", validation_loss)
 
                         # create model checkpoint saver
                         if not os.path.exists("hubbard_autoencoder_logs/" + filename):
@@ -232,7 +237,7 @@ if __name__ == '__main__':
                         saver.save(sess, "hubbard_autoencoder_logs/" + filename + "/model-checkpoint-" + '%04d' % (epoch+1), global_step=global_step)
                         saver.export_meta_graph('hubbard_meta_graphs/' + filename + '/autoencoder.meta')
 
-                print( "Optimization Finished!")
+                print( "\nOptimization Finished!")
                 test_loss = sess.run(eval_op, feed_dict={x: mnist.test.images, phase_train: False})
                 print("Test Loss:", test_loss)
 
@@ -341,3 +346,4 @@ os.system("rm -rf hubbard_meta_graphs/")
 endtime = time.localtime(time.time())
 print( time.asctime(starttime))
 print( time.asctime(endtime))
+print(sorted(list(set(mnist.test.labels))), 'U=',U, layer_trials)

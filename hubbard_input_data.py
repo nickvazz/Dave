@@ -1,4 +1,4 @@
-import glob
+import glob, sys
 import numpy as np
 
 def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
@@ -53,7 +53,6 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
     labelsValidation = []
 
     files = glob.glob(folder_name)
-
     labels = []
     files2keep = []
     counter = 0
@@ -65,16 +64,21 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
                 label_temp = thing[76:90].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
             except:
+                pass
+            try:
                 label_temp = thing[78:90].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
+            except:
+                pass
 
-        elif folder_name[:3] == 'N10':
+        # elif folder_name[:3] == 'N10':
             try:
                 label_temp = thing[39:45].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
             except:
-                print('2D failed')
-        else:
+                pass
+                # print('2D failed')
+        # else:
             try:
                 label_temp = thing[53:57].split('.')[0:2]
                 label = float(label_temp[0] + '.' + label_temp[1])
@@ -91,24 +95,34 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
     square_len_fix = 700
     data = []
     files = np.take(files, files2keep)
+    print('Loaded Temp:')
     for i in range(len(files)):
         aFile = open(files[i], 'r')
+        counter = 0
+
         for line in aFile:
-            if folder_name[:3] == 'Hub':
-                temp = list(line[:-(13+700)]) + [labels[i]]
-                temp = list(map(float,temp))
-                # temp = [*map(float,temp)]
-                data.append(temp)
-            elif folder_name[:3] == 'N10':
-                temp = list(line[:-(13+119)]) + [labels[i]]
-                # print(len(temp))
-                # print(len(temp)**.5)
-                temp = list(map(float,temp))
+            if counter <= 500:
+                if folder_name[:3] == 'Hub':
+                    temp = list(line[:-(13+700)]) + [labels[i]]
+                    temp = list(map(float,temp))
+                    # temp = [*map(float,temp)]
+                    data.append(temp)
+                    # print temp[-1]
+                elif folder_name[:3] == 'N10':
+                    temp = list(line[:-(13+119)]) + [labels[i]]
+                    # print(len(temp))
+                    # print(len(temp)**.5)
+                    temp = list(map(float,temp))
 
-                data.append(temp)
+                    data.append(temp)
+                    # print temp
 
-        print ('T =', labels[i], ' loaded')
-
+            counter += 1
+        # print(labels[i])
+        sys.stdout.flush()
+        sys.stdout.write(str(labels[i]) + ',')
+        sys.stdout.flush()
+    np.random.shuffle(data)
     for i in range(len(data)):
         label = float(data[i][-1])
         dataval = data[i][:-1]
@@ -127,6 +141,8 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
 
         allLabels.append(label)
         allData.append(dataval)
+
+    # print(sorted(list(set(allLabels))), 'input after import')
 
     data_sets = DataSet([],[])
     data_sets.train = DataSet(dataTrain, labelsTrain)

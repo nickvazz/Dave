@@ -47,7 +47,7 @@ def plotting(U, L, embedding):
     df.columns = ['x','y','T']
     df.sort_values('T', inplace=True)
     temps = sorted(list(set(df['T'])))
-
+    print(temps)
     fit_xs = np.arange(0,1.01,0.01)
     plt.figure(figsize=(10,10))
     norm = mpl.colors.Normalize(vmin=.1,vmax=.4)
@@ -82,10 +82,10 @@ def plotting(U, L, embedding):
     # plt.savefig('U' + str(U) + '_' + str(L) + '_' + embedding + '_deep.png')
     # plt.savefig('Random_Tree_Fits/U' + str(U) + '_' + str(L) + '_' + embedding + '.png')
     if tempRange == True:
-        plt.savefig(run_str + 'Random_Tree_Fits/U' + str(U) + '_' + str(L) + '_' + embedding + '_zoom.png')
+        plt.savefig(run_str + 'Random_Tree_Fits/'+ args['LayerTrials'].replace(',', '_') + 'U' + str(U) + '_' + str(L) + '_' + embedding + '_zoom.png')
     else:
-        plt.savefig(run_str + 'Random_Tree_Fits/U' + str(U) + '_' + str(L) + '_' + embedding + '.png')
+        plt.savefig(run_str + 'Random_Tree_Fits/' + args['LayerTrials'].replace(',', '_') + 'U' + str(U) + '_' + str(L) + '_' + embedding + '.png')
     # plt.show()
 
-for L in [3,4]:
+for L in [1,2,3,4]:
     plotting(U,L,embedding)

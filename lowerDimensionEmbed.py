@@ -87,6 +87,7 @@ for L1, L2, L3, L4 in layer_trials:
             if plotOn == True:
                 plt.figure(figsize=(30,10))
             # Projection on to the first 2 principal components
+            counter = 1
             if 1 in whichPlots:
                 print("Computing PCA projection")
                 t0 = time()
@@ -94,7 +95,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_pca)
                 np.savetxt(embed_folder_path + '/pca.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"PCA",1,50)
+                    plotting(xs,ys,"PCA",counter,50)
+                    counter += 1
                 print ("(time %.2fs)" % (time() - t0))
 
             if 2 in whichPlots:
@@ -110,7 +112,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_reduced)
                 np.savetxt(embed_folder_path + '/randTrees.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"Random Forest",2,50)
+                    plotting(xs,ys,"Random Forest",counter,50)
+                    counter += 1
                 print("(time %.2fs)" %(time() - t0))
 
             if 3 in whichPlots:
@@ -122,7 +125,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_tsne)
                 np.savetxt(embed_folder_path + '/tsne.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"t-SNE",3,50)
+                    plotting(xs,ys,"t-SNE",counter,50)
+                    counter += 1
                 print("(time %.2fs)" % (time() - t0))
 
             if 4 in whichPlots:
@@ -134,7 +138,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_se)
                 np.savetxt(embed_folder_path + 'spectral.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"Spectral",4,50)
+                    plotting(xs,ys,"Spectral",counter,50)
+                    counter += 1
                 print("(time %.2fs)" % (time() - t0))
 
 
@@ -147,7 +152,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_iso)
                 np.savetxt(embed_folder_path + '_isomap.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"Isomap",5,50)
+                    plotting(xs,ys,"Isomap",counter,50)
+                    counter += 1
                 print("(time %.2fs)" % (time() - t0))
 
             if 6 in whichPlots:
@@ -160,7 +166,8 @@ for L1, L2, L3, L4 in layer_trials:
                 xs, ys = embedding(X_mds)
                 np.savetxt(embed_folder_path + '_mds.txt', (xs,ys,y), fmt='%10.5f')
                 if plotOn == True:
-                    plotting(xs,ys,"MDS",6,50)
+                    plotting(xs,ys,"MDS",counter,50)
+                    counter += 1
                 print("(time %.2fs)" % (time() - t0))
 
             if plotOn == True:

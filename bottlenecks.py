@@ -61,9 +61,10 @@ for i in range(len(mnist.validation.images)):
 for i in range(len(mnist.train.images)):
     all_images.append(mnist.train.images[i])
     all_labels.append(mnist.train.labels[i])
-
-#       print len(all_images)
-
+# print(sorted(set(mnist.test.labels)), 'test')
+# print(sorted(set(mnist.validation.labels)), 'validation')
+# print(sorted(set(mnist.train.labels)), 'train')
+# print(sorted(set(all_labels)), 'right after loading')
 final_l1 = []
 final_l2 = []
 final_l3 = []
@@ -74,7 +75,6 @@ could_find = []
 r = random.random()
 random.shuffle(all_images, lambda:r)
 random.shuffle(all_labels, lambda:r)
-
 try:
     for layer in layer_trials:
         # print(layer)
@@ -87,9 +87,7 @@ try:
         filename_p1 = str(n_encoder_hidden_1)+'_'+str(n_encoder_hidden_2)+'_'+str(n_encoder_hidden_3)+'_'
         filename_p2 = str(n_code)+'_'+str(batch_size)+'_'+str(learning_rate)+'_'+str(int(training_epochs))
         filename = filename_p1 + filename_p2
-#		print('preL1')
         L1W = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L1W.txt')#, delimiter='')
-#                print('pastL1')
         L2W = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L2W.txt')#, delimiter='')
         L3W = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L3W.txt')#, delimiter='')
         L4W = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L4W.txt')#, delimiter='')
@@ -98,7 +96,10 @@ try:
         L3b = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L3b.txt')#, delimiter='')
         L4b = np.loadtxt(run_str + 'layer_tensors/' + filename + '/L4b.txt')#, delimiter='')
 
+        # print(sorted(set(all_labels)), 'before loop')
+
         for i in range(len(all_images)):
+            # print (round(all_labels[i],2), 'begin loop')
             after_l1 = np.matmul(all_images[i],L1W)
             after_l1 = np.add(after_l1, L1b)
             final_l1.append(np.append(after_l1, all_labels[i]))
@@ -115,6 +116,12 @@ try:
             after_l4 = np.add(after_l4, L4b)
             final_l4.append(np.append(after_l4, all_labels[i]))
 
+            # print(after_l1[:3], round(all_labels[i],2))
+            # print('\n')
+            # print(after_l1, after_l2, all_labels[i])
+            # print(after_l1, after_l2, after_l3, all_labels[i])
+            # print(after_l1, after_l2, after_l3, after_l4, all_labels[i])
+        # print([round(x,2) for x in sorted(set(all_labels))], 'final labels')
         if not os.path.exists(run_str + 'reduced_data/'+ filename):
             os.makedirs(run_str + 'reduced_data/'+ filename)
 
