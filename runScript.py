@@ -3,21 +3,25 @@ import numpy as np
 
 dataDimension = '3D'
 U = 8
-# Us = [4,5,6,8,9,10,12,14,16,20]
-Us = [8]
+Us = [4,5,6,8,9,10,12,14,16,20]
+# Us = [8]
 runs = 1
 # learning_rate = 0.1
 # training_epochs = 100
 learning_rates = [0.001,0.01,0.1,1,10]
+learning_rates = [0.1,0.01]
 # epochs = [50,100,150,200,300]
 epochs = [500,1000,2000]
+epochs = [100]
 batch_size = 10
 layers = ['80,30,10,5', '30,25,10,5', '175,23,17,5']
+layers = ['30,25,10,2']
+layers = ['80,30,5,2','175,23,17,2']
 ZoomTemps = False
 Tmin = 0.28
 Tmax = 0.35
 plotOn = True
-WhichPlots = '1,2,3,5'
+WhichPlots = '1,2,3'
 # # Layers to try below
 # # np.random.seed(1)
 # # np.random.seed(100)
@@ -43,13 +47,12 @@ def run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, laye
                      + ' -WP ' + str(WhichPlots)
     print(flag_string)
     os.system('python autoencoder.py' + flag_string + ' -DataDim ' + str(dataDimension))
-    os.system('python bottlenecks.py' + flag_string + ' -DataDim ' + str(dataDimension))
-    os.system('python lowerDimensionEmbed.py' + plot_flag_string)
+    # os.system('python bottlenecks.py' + flag_string + ' -DataDim ' + str(dataDimension))
+    # os.system('python lowerDimensionEmbed.py' + plot_flag_string)
     # os.system('python fanFitting.py' + plot_flag_string)
-
-for U in Us:
-    for layer_trials in layers:
-        for runs in range(1,runs+1):
-            for learning_rate in learning_rates:
+for runs in range(1,runs+1):
+    for learning_rate in learning_rates:
+        for layer_trials in layers:
+            for U in Us:
                 for training_epochs in epochs:
                     run(U, runs, dataDimension, learning_rate, training_epochs, batch_size, layer_trials, ZoomTemps, Tmin, Tmax, plotOn, WhichPlots)

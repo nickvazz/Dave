@@ -101,7 +101,7 @@ def dataAndLabels(folder_name, tempMin=0, tempMax=.4):
         counter = 0
 
         for line in aFile:
-            if counter <= 500:
+            if counter <= 300:
                 if folder_name[:3] == 'Hub':
                     temp = list(line[:-(13+700)]) + [labels[i]]
                     temp = list(map(float,temp))
