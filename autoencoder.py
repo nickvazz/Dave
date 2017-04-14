@@ -126,9 +126,9 @@ def decoder(code, n_code, phase_train):
 
 def loss(output, x):
     with tf.variable_scope("training"):
-        l2 = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(output, x)), 1))
+        l2 = tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(output, x)), 1))
         train_loss = tf.reduce_mean(l2)
-        train_summary_op = tf.scalar_summary("train_cost", train_loss)
+        train_summary_op = tf.summary.scalar("train_cost", train_loss)
         return train_loss, train_summary_op
 
 def training(cost, global_step):
@@ -139,16 +139,16 @@ def training(cost, global_step):
 
 def image_summary(label, tensor):
     tensor_reshaped = tf.reshape(tensor, [-1, side, side, 1])
-    return tf.image_summary(label, tensor_reshaped)
+    return tf.summary.image(label, tensor_reshaped)
     # return tf.image_summary(label,tensor)
 
 def evaluate(output, x):
     with tf.variable_scope("validation"):
         in_im_op = image_summary("input_image", x)
         out_im_op = image_summary("output_image", output)
-        l2 = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(output, x, name="val_diff")), 1))
+        l2 = tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(output, x, name="val_diff")), 1))
         val_loss = tf.reduce_mean(l2)
-        val_summary_op = tf.scalar_summary("val_cost", val_loss)
+        val_summary_op = tf.summary.scalar("val_cost", val_loss)
         return val_loss, in_im_op, out_im_op, val_summary_op
 
 
@@ -193,12 +193,14 @@ if __name__ == '__main__':
 
 
                 # create graphs for tensorboard
-                train_writer = tf.train.SummaryWriter("hubbard_autoencoder_logs/" + filename + '/', graph=sess.graph)
-                val_writer = tf.train.SummaryWriter("hubbard_autoencoder_logs/" + filename + "/", graph=sess.graph)
+
+                # train_writer = tf.train.SummaryWriter("hubbard_autoencoder_logs/" + filename + '/', graph=sess.graph)
+                train_writer = tf.summary.FileWriter("hubbard_autoencoder_logs/" + filename + '/', graph=sess.graph)
+                val_writer = tf.summary.FileWriter("hubbard_autoencoder_logs/" + filename + "/", graph=sess.graph)
 
 
                 # initialize all variables so things run smoothly
-                init_op = tf.initialize_all_variables()
+                init_op = tf.global_variables_initializer()
                 sess.run(init_op)
                 saver = tf.train.Saver(max_to_keep=200)
 
@@ -242,7 +244,7 @@ if __name__ == '__main__':
                 print("Test Loss:", test_loss)
 
                 sess = tf.InteractiveSession()
-                tf.initialize_all_variables().run()
+                tf.global_variables_initializer().run()
 
                 # grab saved graph of NN to grab specific layers to eval
                 tf.train.import_meta_graph('hubbard_meta_graphs/' + filename + '/autoencoder.meta')
