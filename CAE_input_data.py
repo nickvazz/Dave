@@ -16,10 +16,11 @@ def getTempData(U=8):
         return x.split(' ')[0]
 
 
-    num_data_points = 2
+    num_data_points = 100
+    # num_data_points = 5 # only for testing
     data = np.asarray([])
     temps = np.asarray([])
-    for f in files[15:25]:
+    for f in files:
         df = pd.DataFrame(pd.read_csv(f,header=None))[:num_data_points]
         # df[0] = [np.asarray(map(int,np.asarray(list(x.split(' ')[0])))).reshape(200,4,4,4) for x in df[0]]
         # df[0] = [np.asarray(map(int,np.asarray(list(x.split(' ')[0])))) for x in df[0]]
@@ -28,7 +29,7 @@ def getTempData(U=8):
             item = np.asarray(item, dtype=int)
             # item = item.reshape(64,200)
             # item = item.reshape(4,4,4,200).swapaxes(1,2).swapaxes(1,2)
-            print item, f
+            # print item, f
             data = np.append(data, item)
 
 
@@ -37,6 +38,6 @@ def getTempData(U=8):
         temps = np.append(temps, np.ones(num_data_points) * temperture)
     # print data, type(data), len(data)
     # print temps, type(temps), len(temps)
-    print data.shape, 'shape'
+    # print data.shape, 'shape'
     return data, temps
 # getTempData()
