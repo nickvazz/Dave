@@ -9,6 +9,9 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from keras.callbacks import TensorBoard
 import pandas as pd
+import os
+
+config = tf.ConfigProto().gpu_options.per_process_gpu_memory_fraction = 0.4
 
 data, temps = getTempData()
 # print data.shape, 'shape'
@@ -81,9 +84,9 @@ X2 = middle_layer_output2.reshape(len(X_test),2)
 # temps = map(float,temps)
 # print len(temps)
 # print len(X)
-s = plt.scatter(X[:,0], X[:,1], c=y_train,s=10)
-s2 = plt.scatter(X2[:,0], X2[:,1], c=y_test,s=10)
-cb = plt.colorbar(s)
+# s = plt.scatter(X[:,0], X[:,1], c=y_train,s=10)
+# s2 = plt.scatter(X2[:,0], X2[:,1], c=y_test,s=10)
+# cb = plt.colorbar(s)
 
 df = pd.DataFrame({ 'x':np.append(X[:,0],X2[:,0]),
                     'y':np.append(X[:,1],X2[:,1]),
@@ -91,10 +94,11 @@ df = pd.DataFrame({ 'x':np.append(X[:,0],X2[:,0]),
 
 df.to_csv('dataCAE.csv', sep=',')
 # cb = plt.colorbar(s2)
-cb.set_label('temps')
+# cb.set_label('temps')
 
 from playsound import playsound
 playsound('goat.wav')
 playsound('goat2.wav')
 
-plt.show()
+# plt.show()
+os.system('python CAEembedding.py')
