@@ -57,8 +57,8 @@ sgd = keras.optimizers.SGD(lr=0.01)
 
 ConAE.compile(optimizer=sgd, loss='mse', metrics=['mae'])
 # ConAE.fit(X_train, X_train, epochs=10, batch_size=10, shuffle=True, validation_split=0.1, validation_data=(X_train,X_train))
-ConAE.fit(X_train, X_train, epochs=80, batch_size=10, shuffle=True,callbacks=[TensorBoard(log_dir='/Users/Nick/Desktop/research/Dave/tmp/autoencoder')]) #, validation_split=0.1, validation_data=(X_train,X_train))
-# ConAE.fit(X_train, X_train, epochs=2, batch_size=10, shuffle=True,callbacks=[TensorBoard(log_dir='/Users/Nick/Desktop/research/Dave/tmp/autoencoder')]) #, validation_split=0.1, validation_data=(X_train,X_train))
+ConAE.fit(X_train, X_train, epochs=300, batch_size=10, shuffle=True,callbacks=[TensorBoard(log_dir='/Users/Nick/Desktop/research/Dave/tmp/autoencoder')]) #, validation_split=0.1, validation_data=(X_train,X_train))
+# ConAE.fit(X_train, X_train, epochs=2, batch_size=10, shuffle=True) #, validation_split=0.1, validation_data=(X_train,X_train))
 
 for layer in ConAE.layers:
     g = layer.get_config() # print gives infor about each layer

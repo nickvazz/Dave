@@ -16,7 +16,7 @@ def getTempData(U=8):
         return x.split(' ')[0]
 
 
-    num_data_points = 100
+    num_data_points = 300
     # num_data_points = 5 # only for testing
     data = np.asarray([])
     temps = np.asarray([])
