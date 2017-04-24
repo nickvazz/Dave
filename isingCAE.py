@@ -19,11 +19,9 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 import pandas as pd
 
-# He initialization of weights - done
-# ELU activation function - cont do yet
-# Apply BatchNormalization - done
-# Apply Dropout during training - done
-# Use AdamOptimizer - done
+# TODO
+# elu instead or relu
+
 L = 40
 temp, data = getData(L=L, periodic=True)
 np.random.seed(42)
@@ -50,25 +48,25 @@ datagen.fit(x_train)
 input_img = Input(shape=(L, L, 1))  # adapt this if using `channels_first` image data format
 print K.int_shape(input_img), 'in'
 
-x = Conv2D(16, (3, 3), kernel_initializer=he_normal(),activation='relu', padding='same')(input_img)
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+x = Conv2D(16, (3, 3), kernel_initializer=he_normal(),activation='relu', strides=1, padding='same')(input_img)
+# # x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = MaxPooling2D((2, 2), padding='same')(x)
 print K.int_shape(x), 'p1'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# # x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = MaxPooling2D((2, 2), padding='same')(x)
 print K.int_shape(x), 'p2'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = MaxPooling2D((2, 2), padding='same')(x)
 print K.int_shape(x), 'p3'
 
@@ -77,55 +75,63 @@ print K.int_shape(x), 'flatten'
 
 # x = Dropout(dropoutRate)(x)
 # x = BatchNormalization()(x)
-# x = Dense(2, kernel_initializer=he_normal(), activation='sigmoid', name='middle2in')(x)
-# print K.int_shape(x), 'mid2in'
+x = Dense(2, kernel_initializer=he_normal(), name='middle2in')(x)
+# x = Dense(2, kernel_initializer=he_normal(), activation='relu', name='middle2in')(x)
+print K.int_shape(x), 'mid2in'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Dense(1, kernel_initializer=he_normal(), activation='sigmoid', name='middle1')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Dense(1, kernel_initializer=he_normal(),  name='middle1')(x)
+# x = Dense(1, kernel_initializer=he_normal(), activation='relu', name='middle1')(x)
 print K.int_shape(x), 'mid1'
 
 # x = Dropout(dropoutRate)(x)
 # x = BatchNormalization()(x)
-# x = Dense(2, kernel_initializer=he_normal(), activation='sigmoid', name='middle2out')(x)
-# print K.int_shape(x), 'mid2out'
+x = Dense(2, kernel_initializer=he_normal(), name='middle2out')(x)
+# x = Dense(2, kernel_initializer=he_normal(), activation='relu', name='middle2out')(x)
+print K.int_shape(x), 'mid2out'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = Dense(200, kernel_initializer=he_normal(), activation=None)(x)
 print K.int_shape(x), 'unflatten'
 x = Reshape([5,5,8])(x)
 print K.int_shape(x), 'reshape'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
 print K.int_shape(x), 'u1'
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = UpSampling2D((2, 2))(x)
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(8, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
 print K.int_shape(x), 'u2'
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = UpSampling2D((2, 2))(x)
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-x = Conv2D(16, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(16, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
 print K.int_shape(x), 'u3'
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
 x = UpSampling2D((2, 2))(x)
 # print K.int_shape(x), 'u3'
 
-x = Dropout(dropoutRate)(x)
-x = BatchNormalization()(x)
-decoded = Conv2D(1, (3, 3), kernel_initializer=he_normal(), activation='relu', padding='same')(x)
-print K.int_shape(decoded), 'out'
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+x = Conv2D(16, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same')(x)
+print K.int_shape(x), 'out'
+
+# x = Dropout(dropoutRate)(x)
+# x = BatchNormalization()(x)
+decoded = Conv2D(1, (3, 3), kernel_initializer=he_normal(), activation='relu', strides=1, padding='same',name='output')(x)
+print K.int_shape(decoded), 'out2'
 
 autoencoder = Model(input_img, decoded)
 autoencoder.compile(optimizer='adam',
@@ -139,7 +145,7 @@ logdir = "{}/run-{}/".format(root_logdir, now)
 
 autoencoder.fit_generator(datagen.flow(x_train, x_train, batch_size=10),
                 steps_per_epoch=len(x_train)/10,
-                epochs=100,
+                epochs=50,
                 validation_data=(x_test, x_test),
                 callbacks=[TensorBoard(log_dir=logdir)])
 
@@ -147,6 +153,28 @@ autoencoder.fit_generator(datagen.flow(x_train, x_train, batch_size=10),
 # autoencoder.fit(x_train, x_train, epochs=2, batch_size=10,
 #                 shuffle=True, validation_data=(x_test, x_test),
 #                 callbacks=[TensorBoard(log_dir=logdir)])
+
+output_layer = Model(inputs=autoencoder.input,
+                     outputs=autoencoder.get_layer('output').output)
+output_layer_output = output_layer.predict(x_train)
+
+f, ax = plt.subplots(4,10, figsize=(20,8))
+for i in range(10):
+    idx = np.random.randint(len(x_train))
+    idx2 = np.random.randint(len(x_train))
+
+    ax[0,i].imshow(x_train[idx].reshape(40,40))
+    ax[0,i].set_title(str(y_train[idx]) + '-' + str(i))
+    ax[1,i].imshow(output_layer_output[idx].reshape(40,40))
+    ax[1,i].set_title(str(y_train[idx]) + '-' + str(i))
+
+    ax[2,i].imshow(x_train[idx2].reshape(40,40))
+    ax[2,i].set_title(str(y_train[idx2]) + '-' + str(i+10))
+    ax[3,i].imshow(output_layer_output[idx2].reshape(40,40))
+    ax[3,i].set_title(str(y_train[idx2]) + '-' + str(i+10))
+
+plt.savefig('output{}.png'.format(now))
+plt.show()
 
 middle_layer = Model(inputs=autoencoder.input,
                      outputs=autoencoder.get_layer('middle2in').output)
